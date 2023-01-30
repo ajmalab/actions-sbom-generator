@@ -1,0 +1,46 @@
+name: 'Generate sBOM'
+description: 'Generate and upload an sBOM of the service'
+inputs:
+  dir-path:
+    description: 'The root directory containing the build or lock files.'
+    default: ./
+  sbom-format: 
+    description: 'Format of the generated sBOM (cyclonedx-json, spdx-json)'
+    default: 'cyclonedex-json'
+
+outputs:
+  generated-sbom:
+    description: 'The generated sBOM file'
+    value: ${{ steps.generate-sbom.output }}
+
+
+runs:
+  using: 'composite'
+  steps:  
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+    
+    - name: Execute Gradle build
+      run: ./gradlew build
+    
+    - name: Generate sBOM
+      id: generate-sbom
+      uses: anchore/sbom-action@v0
+      with:
+        path: ${{ inputs.dir-path }}
+        format: ${{ inputs.sbom-format }} 
+    
+    - name: "Determine Branch"
+      id: branches
+      uses: transferwise/sanitize-branch-name@v1
+
+    - name: "Upload sBOM"
+      id: upload-sbom
+      uses: actions/upload-artifact@v3
+      with:
+        path: ${{ steps.generate-sbom.outputs }}
+   
+        
+
+
+  

@@ -16,12 +16,12 @@ outputs:
 
 runs:
   using: 'composite'
+  shell: bash
   steps:  
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
     
     - name: Execute Gradle build
-      shell: bash
       run: ./gradlew build
     
     - name: Generate sBOM

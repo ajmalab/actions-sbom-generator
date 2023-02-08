@@ -14,11 +14,10 @@ runs:
   using: 'composite'
   steps:  
     - uses: actions/checkout@v3
-    - uses: actions/setup-java@v3
     
     - uses: AppThreat/cdxgen-action@v1
       with:
-        output: "./reports/bom.xml"
+        output: "./reports/bom.json"
 
     - uses: actions/upload-artifact@v1
       with:

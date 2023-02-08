@@ -17,12 +17,11 @@ runs:
     
     - uses: AppThreat/cdxgen-action@v1
       with:
-        output: "./reports/bom.json"
+        output: ./bom.json
 
     - uses: actions/upload-artifact@v3
       with:
-        name: reports
-        path: reports
+        path: bom.json
 
    
         

@@ -35,7 +35,9 @@ runs:
       uses: anchore/sbom-action@v0
       with:
         path: ./
-        artifact-name: sbom.spdx
+        format: ${{ inputs.sbom-format }}
+        output-file: ${{ github.repository }}-${{ github.sha }}.json
+        artifact-name: ${{ github.repository }}-${{ github.sha }}.cyclonedx.json
 
   
    

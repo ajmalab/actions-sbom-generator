@@ -8,21 +8,36 @@ inputs:
     description: 'Format of the generated sBOM (cyclonedx-json, spdx-json)'
     default: 'cyclonedex-json'
 
+outputs:
+  generated-sbom:
+    description: 'The generated sBOM file'
+    value: ${{ steps.generate-sbom.output }}
 
 
 runs:
   using: 'composite'
   steps:  
     - uses: actions/checkout@v3
-    
-    - uses: AppThreat/cdxgen-action@v1
+    - uses: actions/setup-java@v3
       with:
-        output: ./bom.json
+        distribution: zulu
+        java-version: 17
 
-    - uses: actions/upload-artifact@v3
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+
+    - name: Execute Gradle build
+      run: ./gradlew build
+
+    - name: Generate sBOM
+      id: generate-sbom
+      uses: anchore/sbom-action@v0
       with:
-        path: bom.json
+        path: ./
+        format: cyclonedx-json
+        artifact-name: ${{ github.repository }}.${{ github.sha }}.${{ inputs.sbom-format }}.json
 
+  
    
         
 

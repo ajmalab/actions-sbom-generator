@@ -36,6 +36,7 @@ runs:
       with:
         path: ./
         format: ${{ inputs.sbom-format }}
+        output-file: ${{ github.repository }}-${{ github.sha }}.json
         artifact-name: ${{ github.repository }}-${{ github.sha }}.json
 
   

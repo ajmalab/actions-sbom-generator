@@ -47,7 +47,8 @@ runs:
       run: cdxgen -o ${{ github.event.repository.name }}-${{ github.sha }}.json
 
     - uses: actions/upload-artifact@v3
-      path: ${{ github.event.repository.name }}-${{ github.sha }}.json
+      with:
+        path: ${{ github.event.repository.name }}-${{ github.sha }}.json
 
   
    

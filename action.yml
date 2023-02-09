@@ -22,22 +22,31 @@ runs:
       with:
         distribution: zulu
         java-version: 17
-
-    - name: Setup Gradle
-      uses: gradle/gradle-build-action@v2
-
-    - name: Execute Gradle build
-      run: ./gradlew build
+    - name: Set up cdxgen
       shell: bash
+      run: npm install -g @cyclonedx/cdxgen@8 
 
-    - name: Generate sBOM
-      id: generate-sbom
-      uses: anchore/sbom-action@v0
-      with:
-        path: ./
-        format: ${{ inputs.sbom-format }}
-        output-file: ${{ github.repository }}-${{ github.sha }}.json
-        artifact-name: ${{ github.repository }}-${{ github.sha }}.cyclonedx.json
+    # - name: Setup Gradle
+    #   uses: gradle/gradle-build-action@v2
+
+    # - name: Execute Gradle build
+    #   run: ./gradlew build
+    #   shell: bash
+
+    # - name: Generate sBOM
+    #   id: generate-sbom
+    #   uses: anchore/sbom-action@v0
+    #   with:
+    #     path: ./
+    #     format: ${{ inputs.sbom-format }}
+    #     output-file: ${{ github.repository }}-${{ github.sha }}.json
+    #     artifact-name: ${{ github.repository }}-${{ github.sha }}.cyclonedx.json
+
+    - name: generate sBOM
+      shell: bash
+      run: cdxgen -o ${{ github.repository }}-${{ github.sha }}.json
+
+    - uses: actions/upload-artifact@v3
 
   
    

@@ -8,20 +8,14 @@ inputs:
     description: 'Format of the generated sBOM (cyclonedx-json, spdx-json)'
     default: 'cyclonedx-json'
 
-outputs:
-  generated-sbom:
-    description: 'The generated sBOM file'
-    value: ${{ steps.generate-sbom.output }}
-
-
 runs:
   using: 'composite'
   steps:  
     - uses: actions/checkout@v3
-    - uses: actions/setup-java@v3
-      with:
-        distribution: zulu
-        java-version: 17
+    # - uses: actions/setup-java@v3
+    #   with:
+    #     distribution: zulu
+    #     java-version: 17
     - name: Set up cdxgen
       shell: bash
       run: npm install -g @cyclonedx/cdxgen@8 
@@ -43,11 +37,13 @@ runs:
     #     artifact-name: ${{ github.repository }}-${{ github.sha }}.cyclonedx.json
 
     - name: generate sBOM
+      id: generate-sbom
       shell: bash
-      run: cdxgen -o ${{ github.event.repository.name }}-${{ github.sha }}.json
+      run: cdxgen ${{ inputs.dir-path }} -o ${{ github.event.repository.name }}-${{ github.sha }}.json
 
     - uses: actions/upload-artifact@v3
       with:
+        name: cyclonedx-sbom
         path: ${{ github.event.repository.name }}-${{ github.sha }}.json
 
   

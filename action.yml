@@ -44,7 +44,7 @@ runs:
 
     - name: generate sBOM
       shell: bash
-      run: cdxgen -o ${{ github.repository }}-${{ github.sha }}.json
+      run: cdxgen -o ${{ github.event.repository.name }}-${{ github.sha }}.json
 
     - uses: actions/upload-artifact@v3
       path: ${{ github.event.repository.name }}-${{ github.sha }}.json
